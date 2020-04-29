@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import { HashRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 
 import Header from './components/header';
 import Home from './containers/home';
 import Signup from './containers/signup';
 import Login from './containers/login';
-import Logout from './containers/logout';
+import Logout from './containers/Logout';
 
 class App extends Component {
   render() {
     return (
-      <HashRouter>
+      <BrowserRouter>
         <>
           <Route path='/' component={ Header } />
           <div className='container mt-5'>
@@ -20,7 +20,7 @@ class App extends Component {
             <Route path='/logout' exact component={ Logout } />
           </div>
         </>
-      </HashRouter>
+      </BrowserRouter>
     );
   }
 }

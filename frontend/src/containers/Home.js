@@ -66,7 +66,7 @@ export default class Home extends React.Component {
     else {
       return (
         <>
-          <h2>Welcome back, {userEmail}</h2>
+          <h2>Welcome, {userEmail}</h2>
           <h4>Your ID is: {userId}</h4>
           <button onClick={this.handleUnprotectedAPI}>Unprotected API Invokation</button>
           <button onClick={this.handleProtectedAPI}>Protected API</button>
