@@ -1,16 +1,26 @@
-import app from 'firebase/app';
-import 'firebase/auth';
+import app from "firebase/app"
+import "firebase/auth"
+
+const {
+  REACT_APP_APIKEY,
+  REACT_APP_AUTHDOMAIN,
+  REACT_APP_DATABASEURL,
+  REACT_APP_PROJECTID,
+  REACT_APP_STORAGEBUCKET,
+  REACT_APP_MESSAGINGSENDERID,
+  REACT_APP_APPID,
+} = process.env
 
 const config = {
-  apiKey: "AIzaSyBCOpAMlxCsMpPvyHDeCdNGS8WfgGJ-G6E",
-  authDomain: "pursuit-fbase-auth.firebaseapp.com",
-  databaseURL: "https://pursuit-fbase-auth.firebaseio.com",
-  projectId: "pursuit-fbase-auth",
-  storageBucket: "pursuit-fbase-auth.appspot.com",
-  messagingSenderId: "534019135106",
-  appId: "1:534019135106:web:3fafad7c49742b255a469b"
-};
+  apiKey : REACT_APP_APIKEY,
+  authDomain: REACT_APP_AUTHDOMAIN,
+  databaseURL: REACT_APP_DATABASEURL,
+  projectId: REACT_APP_PROJECTID,
+  storageBucket: REACT_APP_STORAGEBUCKET,
+  messagingSenderId: REACT_APP_MESSAGINGSENDERID,
+  appId: REACT_APP_APPID,
+}
 
-app.initializeApp(config);
+app.initializeApp(config)
 
-export default app;
+export default app
