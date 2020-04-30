@@ -63,8 +63,24 @@ const Home = () => {
       })
   }
 
+  const handleAnonymousAPI = () => {
+    axios
+      .get("http://localhost:3001/anonymous")
+      .then((response) => {
+        console.log(response.data)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
   if (!userMeta.email) {
-    return <h1>You're not logged in</h1>
+    return (
+      <>
+        <h1>You're not logged in</h1>
+        <button onClick={handleAnonymousAPI}>Unprotected anonymous API</button>
+      </>
+    )
   } else {
     return (
       <>
