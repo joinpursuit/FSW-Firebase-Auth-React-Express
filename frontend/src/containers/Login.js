@@ -9,17 +9,12 @@ const Login = () => {
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        // when auth state changes (user logs in and `user` obj exists)
-        // then redirect to homepage
         history.push("/")
       } else {
-        // do nothing
       }
     })
 
     return () => {
-      // returning a function from an effect hook will run the function 
-      // whenever the component gets unmounted
       unsubscribe()
     }
   })
