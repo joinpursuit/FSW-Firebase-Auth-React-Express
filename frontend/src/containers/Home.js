@@ -1,78 +1,83 @@
-import React from 'react';
-import firebase from '../firebase';
-import axios from 'axios';
+import React, { useEffect, useState } from "react"
+import firebase from "../firebase"
+import axios from "axios"
 
-export default class Home extends React.Component {
+const Home = () => {
+  let [userMeta, setUserMeta] = useState({})
+  let [token, setToken] = useState({})
 
-  state = {
-    userEmail: '',
-    userId: '',
-    token: ''
-  }
-
-  componentDidMount() {
-    this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+  useEffect(() => {
+    // useEffect runs whenever a component is mounted or rerenders
+    const stopListening = firebase.auth().onAuthStateChanged((user) => {
+      // if user object exists, user is logged in
       if (user) {
-        // ..... DO YOUR LOGGED IN LOGIC
-        this.setState({ userEmail: user.email, userId: user.uid }, () => {
-          this.getFirebaseIdToken()
-        });
+        // grab email, user id from firebase user obj
+        // and set state with it
+        const { email, uid } = user
+        const lastLogin = user.metadata.lastSignInTime
+
+        setUserMeta({ email, uid, lastLogin })
+        getFirebaseIdToken()
+      } else {
+        // user object doesnt exist, therefore user is not logged in
+        console.log("user is not logged in")
       }
-      else {
-        // ..... The user is logged out
-      }
     })
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-
-  handleUnprotectedAPI = (e) => {
-    const { userEmail, userId } = this.state;
-
-    axios.post('http://localhost:3001/unprotected', {
-      id: userId,
-      email: userEmail
-    })
-    .then(response => response.data )
-    .then(data => {
-      console.log(data);
-    })
-  }
-
-  getFirebaseIdToken = () => {
-    firebase.auth().currentUser.getIdToken(false).then((token) => {
-      this.setState({ token })
-    }).catch((error) => {
-      // Handle error
-    });
-  }
-
-  handleProtectedAPI = (e) => {
-    axios.post('http://localhost:3001/protected', { token: this.state.token })
-    .then(response => response.data )
-    .then(data => {
-      console.log(data);
-    })
-  }
-
-  render() {
-    const { userEmail, userId } = this.state;
-
-    if (userEmail === '') {
-      return <h1>You're not logged in</h1>
+    return () => {
+      // kill firebase event listener when component unmounts
+      stopListening()
     }
-    else {
-      return (
-        <>
-          <h2>Welcome, {userEmail}</h2>
-          <h4>Your ID is: {userId}</h4>
-          <button onClick={this.handleUnprotectedAPI}>Unprotected API Invokation</button>
-          <button onClick={this.handleProtectedAPI}>Protected API</button>
-        </>
-      )
-    }
+  }, [])
+
+  const getFirebaseIdToken = () => {
+    firebase
+      .auth()
+      .currentUser.getIdToken(false)
+      .then((token) => {
+        setToken({ token })
+      })
+      .catch((error) => {
+        // Handle error
+        console.error(error)
+      })
+  }
+
+  const handleUnprotectedAPI = (e) => {
+    axios
+      .post("http://localhost:3001/unprotected", {
+        id: userMeta.uid,
+        email: userMeta.email,
+      })
+      .then((response) => response.data)
+      .then((data) => {
+        console.log(data)
+      })
+  }
+
+  const handleProtectedAPI = (e) => {
+    axios
+      .post("http://localhost:3001/protected", { token })
+      .then((response) => response.data)
+      .then((data) => {
+        console.log(data)
+      })
+  }
+
+  if (!userMeta.email) {
+    return <h1>You're not logged in</h1>
+  } else {
+    return (
+      <>
+        <h2>Welcome, {userMeta.email}</h2>
+        <h4>Your ID is: {userMeta.uid}</h4>
+        <h4>You last signed in: {userMeta.lastLogin}</h4>
+        <button onClick={handleUnprotectedAPI}>
+          Unprotected API Invokation
+        </button>
+        <button onClick={handleProtectedAPI}>Protected API</button>
+      </>
+    )
   }
 }
 
+export default Home

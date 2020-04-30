@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 
-import Header from './components/header';
-import Home from './containers/home';
-import Signup from './containers/signup';
-import Login from './containers/login';
+import Header from './components/Header';
+import Home from './containers/Home';
+import Signup from './containers/Signup';
+import Login from './containers/Login';
 import Logout from './containers/Logout';
 
 class App extends Component {

@@ -29,12 +29,13 @@ export default class Signup extends React.Component {
 
   componentDidMount() {
     this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+      // if user object exists, user is logged in
       if (user) {
-        // ..... DO YOUR LOGGED IN LOGIC
+        // redirect to homepage once logged in
         this.props.history.push('/')
       }
       else {
-        // ..... The user is logged out
+        // user is not logged in yet, do nothing
       }
     })
   }
@@ -51,16 +52,14 @@ export default class Signup extends React.Component {
       <>
         <h1>Sign Up</h1>
         {displayError}
-        <form>
+        <form onSubmit={this.handleSubmit}>
           <div className="form-group">
-            <label htmlFor="exampleInputEmail1">Email</label>
             <input type="email" className="form-control" aria-describedby="emailHelp" placeholder="Enter email" name="email" value={email} onChange={this.handleChange} />
           </div>
           <div className="form-group">
-            <label htmlFor="exampleInputPassword1">Password</label>
             <input type="password" className="form-control" placeholder="Password" value={password} name="password" onChange={this.handleChange} />
           </div>
-          <button type="submit" className="btn btn-primary" onClick={this.handleSubmit}>Sign Up</button>
+          <button type="submit" className="btn btn-primary">Sign Up</button>
         </form>
       </>
     )
