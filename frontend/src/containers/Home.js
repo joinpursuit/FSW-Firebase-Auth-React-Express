@@ -56,7 +56,7 @@ const Home = () => {
 
   const handleProtectedAPI = (e) => {
     axios
-      .post("http://localhost:3001/protected", { token })
+      .post("http://localhost:3001/protected", token)
       .then((response) => response.data)
       .then((data) => {
         console.log(data)
