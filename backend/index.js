@@ -1,48 +1,51 @@
-const express = require('express');
-const app = express();
-const port = 3001;
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const admin = require('./firebase');
+const express = require("express")
+const app = express()
+const port = 3001
+const bodyParser = require("body-parser")
+const cors = require("cors")
+const admin = require("./firebase")
 
 // -------- MIDDLEWARE
-app.use(cors());
+app.use(cors())
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
 const checkFirebaseToken = (req, res, next) => {
-  const { token } = req.body;
+  const { token } = req.body
 
-  admin.auth().verifyIdToken(token)
-    .then(function(decodedToken) {
-      var uid = decodedToken.uid;
-      next();
-    }).catch(function(error) {
+  admin
+    .auth()
+    .verifyIdToken(token)
+    .then(function (decodedToken) {
+      var uid = decodedToken.uid
+      next()
+    })
+    .catch(function (error) {
       // Handle error
-      res.json('ERROR!!!!')
-    });
+      res.json("ERROR!!!!")
+    })
 }
 
 // -------- ROUTES
-app.get('/', (req, res) => {
-  res.json('Hello world');
+app.get("/", (req, res) => {
+  res.json("Hello world")
 })
 
-app.get('/anonymous', (req, res) => {
+app.get("/anonymous", (req, res) => {
   res.json(`Literally anyone can see this`)
 })
 
-app.post('/unprotected', (req, res) => {
-  const { email, id } = req.body;
-  res.json(`Welcome! You are user ${email} with ${id}`);
+app.post("/unprotected", (req, res) => {
+  const { email, id } = req.body
+  res.json(`Welcome! You are user ${email} with ${id}`)
 })
 
-app.post('/protected', checkFirebaseToken, (req, res) => {
-  res.json({data: "very sensitive data"});
+app.post("/protected", checkFirebaseToken, (req, res) => {
+  res.json({ data: "very sensitive data" })
 })
 
 app.listen(port, () => {
-  console.log('Server listening on port: '+port);
+  console.log("Server listening on port: " + port)
 })
